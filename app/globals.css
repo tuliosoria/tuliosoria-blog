@@ -2,19 +2,249 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Design tokens: a warm editorial paper world.
+ * Light: warm paper, ink text, burnt-orange signal accent.
+ * Dark: deep warm charcoal, paper text, amber signal accent.
+ */
 :root {
   color-scheme: light;
+  --paper: 250 247 242;
+  --paper-deep: 242 236 226;
+  --ink: 28 25 23;
+  --ink-soft: 99 92 83;
+  --line: 229 221 207;
+  --accent: 194 65 12;
+  --accent-deep: 154 52 18;
 }
 
 .dark {
   color-scheme: dark;
+  --paper: 23 20 17;
+  --paper-deep: 32 28 24;
+  --ink: 237 232 223;
+  --ink-soft: 168 156 142;
+  --line: 56 49 42;
+  --accent: 251 146 60;
+  --accent-deep: 253 186 116;
 }
 
 body {
-  @apply bg-white text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100;
+  @apply bg-paper font-sans text-ink antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Keep long post content readable on wide screens */
+/* ---- Browser surfaces: selection, focus, scrollbars, link underlines ---- */
+
+::selection {
+  background: rgb(var(--accent) / 0.24);
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+a {
+  text-underline-offset: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--ink-soft) / 0.35);
+  border-radius: 8px;
+  border: 2px solid rgb(var(--paper));
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--accent) / 0.6);
+}
+
+/* ---- One authored motion moment: the home hero entrance ---- */
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.hero-enter {
+  animation: hero-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-enter {
+    animation: none;
+  }
+}
+
+/* ---- Article typography: editorial serif reading experience ---- */
+
 .prose {
   @apply max-w-none;
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-size: 1.1875rem;
+  line-height: 1.8;
+  max-width: 70ch;
+  color: rgb(var(--ink));
+  --tw-prose-body: rgb(var(--ink));
+  --tw-prose-headings: rgb(var(--ink));
+  --tw-prose-bold: rgb(var(--ink));
+  --tw-prose-counters: rgb(var(--ink-soft));
+  --tw-prose-bullets: rgb(var(--accent));
+  --tw-prose-hr: rgb(var(--line));
+  --tw-prose-quotes: rgb(var(--ink));
+  --tw-prose-code: rgb(var(--ink));
+  --tw-prose-pre-code: rgb(245 237 224);
+  --tw-prose-pre-bg: rgb(33 26 20);
+}
+
+/* The page chrome already renders the post title; the MDX body repeats it. */
+.prose > h1:first-child {
+  display: none;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.prose h2 {
+  margin-top: 2.75em;
+  margin-bottom: 0.9em;
+  font-size: 1.65em;
+  line-height: 1.25;
+}
+
+.prose h3 {
+  margin-top: 2.25em;
+  margin-bottom: 0.75em;
+  font-size: 1.3em;
+  line-height: 1.35;
+}
+
+/* Lede: open the article a touch larger. */
+.prose > p:first-of-type {
+  font-size: 1.18em;
+  line-height: 1.72;
+}
+
+.prose p,
+.prose li {
+  overflow-wrap: break-word;
+}
+
+.prose a {
+  color: rgb(var(--ink));
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: rgb(var(--accent) / 0.45);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.prose a:hover {
+  color: rgb(var(--accent-deep));
+  text-decoration-color: rgb(var(--accent));
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+/* Blockquote as voice, not a callout bar: large serif italic with a
+   hanging accent quotation mark. */
+.prose blockquote {
+  border: 0;
+  padding: 0;
+  margin-top: 2.25em;
+  margin-bottom: 2.25em;
+  font-style: italic;
+  font-size: 1.32em;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: rgb(var(--ink));
+  position: relative;
+  padding-left: 1.6em;
+}
+
+.prose blockquote::before {
+  content: "\201C";
+  position: absolute;
+  left: 0;
+  top: -0.18em;
+  font-style: normal;
+  font-size: 2.4em;
+  line-height: 1;
+  color: rgb(var(--accent));
+}
+
+.prose blockquote p:first-of-type::before,
+.prose blockquote p:last-of-type::after {
+  content: none;
+}
+
+.prose code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.82em;
+  background: rgb(var(--paper-deep));
+  border: 1px solid rgb(var(--line));
+  border-radius: 6px;
+  padding: 0.15em 0.4em;
+  font-weight: 500;
+}
+
+.prose code::before,
+.prose code::after {
+  content: none;
+}
+
+.prose pre {
+  border-radius: 12px;
+  box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.35);
+}
+
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-weight: 400;
+}
+
+.prose hr {
+  margin-top: 3em;
+  margin-bottom: 3em;
+  border-color: rgb(var(--line));
+}
+
+.prose ul > li::marker,
+.prose ol > li::marker {
+  color: rgb(var(--accent));
+}
+
+.prose li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose img {
+  border-radius: 12px;
+  box-shadow: 0 16px 40px -16px rgb(0 0 0 / 0.3);
 }

@@ -25,7 +25,7 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="rounded-md p-2 text-neutral-600 transition-colors hover:bg-neutral-200/60 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+      className="rounded-full border border-transparent p-2 text-ink-soft transition-colors hover:border-line hover:text-accent"
     >
       {dark === null ? (
         <span className="block h-5 w-5" />

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllPosts, getPostBySlug, formatDate } from "@/lib/posts";
+import { getAllPosts, getPostBySlug, formatDate, readingTimeMinutes } from "@/lib/posts";
 import { site } from "@/lib/site";
 
 export async function generateStaticParams() {
@@ -42,30 +42,34 @@ export default async function PostPage({ params }: { params: { slug: string } })
 
   return (
     <article>
-      <p className="mb-2 text-sm text-neutral-500 dark:text-neutral-400">
-        {formatDate(post.date)}
-      </p>
-      <h1 className="mb-4 text-4xl font-bold tracking-tight">{post.title}</h1>
-      {post.tags.length > 0 && (
-        <div className="mb-8 flex flex-wrap gap-2">
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
+      <header className="mb-10">
+        <p className="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-ink-soft">
+          {formatDate(post.date)} · {readingTimeMinutes(post.contentHtml)} min read
+        </p>
+        <h1 className="font-display text-4xl font-medium leading-[1.12] tracking-[-0.02em] text-balance md:text-[3.25rem]">
+          {post.title}
+        </h1>
+        {post.tags.length > 0 && (
+          <div className="mt-5 flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-line px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-soft"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </header>
       <div
-        className="prose prose-neutral prose-lg dark:prose-invert"
+        className="prose prose-lg"
         dangerouslySetInnerHTML={{ __html: post.contentHtml }}
       />
-      <div className="mt-12 border-t border-neutral-200 pt-6 dark:border-neutral-800">
+      <div className="mt-14 border-t border-line pt-6">
         <Link
           href="/"
-          className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+          className="text-sm font-semibold text-accent-deep transition-colors hover:text-accent"
         >
           ← Back to all posts
         </Link>

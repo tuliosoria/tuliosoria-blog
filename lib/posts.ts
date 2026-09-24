@@ -75,3 +75,10 @@ export function formatDate(iso: string): string {
     day: "numeric",
   });
 }
+
+/** Estimated reading time in minutes, derived from the rendered article text. */
+export function readingTimeMinutes(contentHtml: string): number {
+  const text = contentHtml.replace(/<[^>]*>/g, " ");
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}

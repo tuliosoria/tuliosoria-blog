@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 export default function About() {
   return (
     <div>
-      <h1 className="mb-6 text-4xl font-bold tracking-tight">About</h1>
-      <div className="prose prose-neutral prose-lg dark:prose-invert">
+      <h1 className="mb-8 font-display text-4xl font-medium tracking-[-0.02em] text-balance md:text-5xl">About</h1>
+      <div className="prose prose-lg">
         <p>
           I&apos;m <strong>Tulio Soria</strong>, a digital product and AI leader
           with nearly 20 years of experience building digital products — from

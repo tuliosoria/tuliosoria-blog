@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+const withAlpha = (variable: string) => `rgb(var(${variable}) / <alpha-value>)`;
+
 const config: Config = {
   darkMode: "class",
   content: [
@@ -10,8 +12,22 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
-        serif: ["ui-serif", "Georgia", "Cambria", "serif"],
+        display: ["var(--font-display)", "ui-serif", "Georgia", "Cambria", "serif"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+      },
+      colors: {
+        paper: withAlpha("--paper"),
+        "paper-deep": withAlpha("--paper-deep"),
+        ink: {
+          DEFAULT: withAlpha("--ink"),
+          soft: withAlpha("--ink-soft"),
+        },
+        line: withAlpha("--line"),
+        accent: {
+          DEFAULT: withAlpha("--accent"),
+          deep: withAlpha("--accent-deep"),
+        },
       },
     },
   },
